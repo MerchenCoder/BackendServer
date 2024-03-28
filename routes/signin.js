@@ -26,21 +26,19 @@ app.route("/api/signin").post(async (req, res) => {
 
     if (rows.length === 0) {
       //해당 아이디, 비밀번호로 된 계정이 없음
-      res.json({
-        cmd: 1101,
-        errorno: 9001,
-      });
+      res.status(404).json({ cmd: 1101, errorno: 404 }); // 클라이언트에게 409 상태 코드와 오류 코드를 전송합니다.
     } else {
       const user = rows[0];
-      res.json({
+      res.status(200).json({
         cmd: 200,
         user_id: user.user_id,
         user_name: user.user_name,
+        errorno: 0,
       });
     }
   } catch (err) {
     console.log(err);
-    res.json({
+    res.status(500).json({
       cmd: 1101,
       errorno: err.errno,
     });
