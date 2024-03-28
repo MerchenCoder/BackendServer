@@ -1,14 +1,16 @@
 const express = require("express");
 const db = require("../lib/pgConnect");
+const bcrypt = require("bcrypt"); //암호화 모듈
 const app = express();
 
 app.use(express.json());
 
 app.route("/api/signup").post(async (req, res) => {
-  const user_table = [req.body.id, req.body.name, req.body.password, "1234"];
+  const hasedPassword = await bcrypt.hash(req.body.password, 10); //암호화, saltround = 10
+  const user_table = [req.body.id, req.body.name, hasedPassword];
 
   const sql =
-    "insert into user_table(user_id,user_name,user_password,user_salt) values($1,$2,$3,$4)";
+    "insert into user_table(user_id,user_name,user_password) values($1,$2,$3)";
 
   db.query(sql, user_table, (err, result) => {
     if (err) {
