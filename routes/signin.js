@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("../lib/db");
+const db = require("../lib/pgConnect");
 const app = express();
 
 app.use(express.json());
@@ -9,27 +9,33 @@ app.route("/api/signin").post(async (req, res) => {
   console.log(data.id, data.password);
 
   try {
-    const [results, fields] = await db
-      .promise()
-      .query(
-        `SELECT * FROM player WHERE player_id = '${data.id}' AND player_password = '${data.password}'`
-      );
+    //mysql
+    // const [results, fields] = await db
+    //   .promise()
+    //   .query(
+    //     `SELECT * FROM player WHERE player_id = '${data.id}' AND player_password = '${data.password}'`
+    //   );
 
-    console.log(results);
+    //PostgreSQL
+    const { rows } = await db.query(
+      "SELECT user_id, user_name  FROM user_table WHERE user_id = $1 AND user_password = $2",
+      [data.id, data.password]
+    );
 
-    if (results[0] === undefined) {
+    console.log(rows);
+
+    if (rows.length === 0) {
+      //해당 아이디, 비밀번호로 된 계정이 없음
       res.json({
         cmd: 1101,
         errorno: 9001,
       });
     } else {
+      const user = rows[0];
       res.json({
         cmd: 200,
-        player_id: results[0].player_id,
-        player_password: results[0].password,
-        nickname: results[0].nickname,
-        age: results[0].age,
-        money: results[0].money,
+        user_id: user.user_id,
+        user_name: user.user_name,
       });
     }
   } catch (err) {

@@ -8,7 +8,7 @@ app.route("/api/join").post((req, res) => {
   const user = req.body;
   console.log(user.id, user.password, user.nickname, user.age);
 
-  db((connection) => {
+  db((con) => {
     const sql = `insert into player values ('${user.id}', '${user.password}',"salt" ,'${user.nickname}', '${user.age}', 0)`;
     console.log(sql);
     con.query(sql, (err, result, fields) => {
