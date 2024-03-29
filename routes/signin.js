@@ -1,8 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const db = require("../lib/pgConnect");
-const app = express();
 
+const app = express();
 app.use(express.json());
 
 app.route("/api/signin").post(async (req, res) => {
@@ -15,6 +15,7 @@ app.route("/api/signin").post(async (req, res) => {
     //     `SELECT * FROM player WHERE player_id = '${data.id}' AND player_password = '${data.password}'`
     //   );
 
+    //---로그인 과정---//
     //PostgreSQL user 검색
     const result = await db.query(
       "SELECT *  FROM user_table WHERE user_id = $1",
@@ -27,14 +28,15 @@ app.route("/api/signin").post(async (req, res) => {
       res.status(404).json({ cmd: 1101, errorno: 404 }); // 클라이언트에게 409 상태 코드와 오류 코드를 전송합니다.
       return;
     }
+    const user = result.rows[0];
     const hashedPassword = result.rows[0].user_password;
     const passwordMatch = await bcrypt.compare(data.password, hashedPassword);
 
     if (!passwordMatch) {
       //해당 아이디, 비밀번호로 된 계정이 없음
       res.status(401).json({ cmd: 1101, errorno: 401 }); // 클라이언트에게 409 상태 코드와 오류 코드를 전송합니다.
+      return;
     } else {
-      const user = result.rows[0];
       res.status(200).json({
         cmd: 200,
         user_id: user.user_id,
