@@ -5,7 +5,7 @@ const db = require("../lib/pgConnect");
 const app = express();
 app.use(express.json());
 
-app.route("/api/signin").post(async (req, res) => {
+app.route("/signin").post(async (req, res) => {
   const data = req.body;
   try {
     //mysql

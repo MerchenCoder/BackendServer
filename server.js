@@ -1,22 +1,35 @@
 const express = require("express");
-const app = express();
-var bodyParser = require("body-parser");
-var db = require("./lib/pgConnect");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const db = require("./lib/pgConnect");
 
 const signinRouter = require("./routes/signin");
 const signupRouter = require("./routes/signup");
-const logoutRouter = require("./routes/logout"); // logout 파일의 경로에 맞게 수정해주세요
+//const logoutRouter = require("./routes/logout"); // logout 파일의 경로에 맞게 수정해주세요
+const saveRouter = require("./routes/save");
+
+const app = express();
+
+app.use(
+  cors({
+    origin: "*", // 출처 허용 옵션
+    credentials: true, // 응답 헤더에 Access-Control-Allow-Credentials 추가
+    optionsSuccessStatus: 200, // 응답 상태 200으로 설정
+  })
+);
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(signinRouter);
-app.use(signupRouter);
-app.use(logoutRouter);
-
+//라우트 등록
+app.use("/user", signinRouter);
+app.use("/user", signupRouter);
+//app.use("/user", logoutRouter);
+app.use("/save", saveRouter);
 app.use("/image", express.static(__dirname + "/image"));
 
 app.get("/", async (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
   try {
     // 1. 데이터베이스에서 모든 테이블 이름을 가져옵니다.
     const tableNamesQuery =
@@ -39,9 +52,11 @@ app.get("/", async (req, res) => {
       for (const row of result.rows) {
         html += "<tr>";
         for (const field of result.fields) {
-          html += `<td style='border:1px solid black; padding:5px; text-align:center;'>${
-            row[field.name]
-          }</td>`;
+          const fieldValue =
+            typeof row[field.name] === "object"
+              ? JSON.stringify(row[field.name])
+              : row[field.name];
+          html += `<td style='border:1px solid black; padding:5px; text-align:center;'>${fieldValue}</td>`;
         }
         html += "</tr>";
       }

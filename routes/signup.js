@@ -5,7 +5,7 @@ const app = express();
 
 app.use(express.json());
 
-app.route("/api/signup").post(async (req, res) => {
+app.route("/signup").post(async (req, res) => {
   const hasedPassword = await bcrypt.hash(req.body.password, 10); //암호화, saltround = 10
   const user_table = [req.body.id, req.body.name, hasedPassword];
 
