@@ -2,10 +2,11 @@ const express = require("express");
 const db = require("../lib/pgConnect");
 const bcrypt = require("bcrypt"); //암호화 모듈
 const app = express();
+const router = express.Router();
 
-app.use(express.json());
+router.use(express.json());
 
-app.route("/signup").post(async (req, res) => {
+router.post("/signup", async (req, res) => {
   const hasedPassword = await bcrypt.hash(req.body.password, 10); //암호화, saltround = 10
   const user_table = [req.body.id, req.body.name, hasedPassword];
 
@@ -31,4 +32,23 @@ app.route("/signup").post(async (req, res) => {
   });
 });
 
-module.exports = app;
+router.get("/withdrawal", async (req, res) => {
+  const userId = req.query.userId;
+  const sql = `DELETE FROM user_table WHERE user_id = $1`;
+
+  try {
+    db.query(sql, [userId], (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(err.errno).json({ cmd: 5001, errorno: err.errorno });
+      } else {
+        res.status(200).json({ cmd: 200, errorno: 0 });
+      }
+    });
+  } catch (error) {
+    console.error("에러 발생:", error);
+    res.status(500).json({ cmd: 5001, errorno: error.errorno });
+  }
+});
+
+module.exports = router;

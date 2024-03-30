@@ -5,7 +5,6 @@ const db = require("./lib/pgConnect");
 
 const signinRouter = require("./routes/signin");
 const signupRouter = require("./routes/signup");
-//const logoutRouter = require("./routes/logout"); // logout 파일의 경로에 맞게 수정해주세요
 const saveRouter = require("./routes/save");
 const loadRouter = require("./routes/load");
 
@@ -25,7 +24,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //라우트 등록
 app.use("/user", signinRouter);
 app.use("/user", signupRouter);
-//app.use("/user", logoutRouter);
 app.use("/save", saveRouter);
 app.use("/load", loadRouter);
 app.use("/image", express.static(__dirname + "/image"));
