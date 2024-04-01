@@ -7,6 +7,7 @@ const signinRouter = require("./routes/signin");
 const signupRouter = require("./routes/signup");
 const saveRouter = require("./routes/save");
 const loadRouter = require("./routes/load");
+const s3FileDownRouter = require("./routes/downloadFile");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use("/user", signinRouter);
 app.use("/user", signupRouter);
 app.use("/save", saveRouter);
 app.use("/load", loadRouter);
+app.use("/download", s3FileDownRouter);
 app.use("/image", express.static(__dirname + "/image"));
 
 app.get("/", async (req, res) => {
