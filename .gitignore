@@ -136,3 +136,4 @@ dist
 # Ignore development configuration file that may contain sensitive information
 config/dev.js
 *.sql
+.env
