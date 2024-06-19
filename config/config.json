@@ -2,7 +2,7 @@
   "development": {
     "username": "devuser",
     "password": "dev1234",
-    "database": "testdb",
+    "database": "merchencoderdb",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "schema": "public"
@@ -10,7 +10,7 @@
   "test": {
     "username": "devuser",
     "password": "dev1234",
-    "database": "testdb",
+    "database": "merchencoderdb",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "schema": "public"
