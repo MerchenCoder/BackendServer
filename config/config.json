@@ -1,0 +1,22 @@
+{
+  "development": {
+    "username": "devuser",
+    "password": "dev1234",
+    "database": "testdb",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "schema": "public"
+  },
+  "test": {
+    "username": "devuser",
+    "password": "dev1234",
+    "database": "testdb",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "schema": "public"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres"
+  }
+}
