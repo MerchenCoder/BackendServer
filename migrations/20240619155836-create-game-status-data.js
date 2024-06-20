@@ -15,14 +15,6 @@ module.exports = {
       game_status_data: {
         type: Sequelize.JSONB,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
     });
   },
   async down(queryInterface, Sequelize) {

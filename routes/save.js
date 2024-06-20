@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("../lib/pgConnect");
 
 const app = express();
-app.unsubscribe(express.json());
+app.use(express.json());
 
 app.route("/:userId").post(async (req, res) => {
   const { userId } = req.params;
